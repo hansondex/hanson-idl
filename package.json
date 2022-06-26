@@ -1,6 +1,6 @@
 {
   "name": "@hansondex/hanson-idl",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Interface definition for the Hanson DEX.",
   "repository": "git@github.com:HansonDEX/hanson-idl.git",
   "author": "Hanson So <me@hanson.so>",
