@@ -1,0 +1,1602 @@
+{
+  "name": "HansonCore",
+  "modules": {
+    "Math": {
+      "module_name": {
+        "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+        "name": "Math"
+      },
+      "functions": [],
+      "structs": [],
+      "errors": {}
+    },
+    "Meta": {
+      "module_name": {
+        "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+        "name": "Meta"
+      },
+      "functions": [],
+      "structs": [],
+      "errors": {}
+    },
+    "Pair": {
+      "module_name": {
+        "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+        "name": "Pair"
+      },
+      "functions": [],
+      "structs": [
+        {
+          "module_name": {
+            "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+            "name": "Pair"
+          },
+          "name": "Pair",
+          "doc": "Stores a pair.",
+          "fields": [
+            {
+              "name": "reserve0",
+              "doc": "The `Coin0` coins backing the LP token.",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Coin"
+                  },
+                  "name": "Coin"
+                }
+              }
+            },
+            {
+              "name": "reserve1",
+              "doc": "The `Coin1` coins backing the LP token.",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Coin"
+                  },
+                  "name": "Coin"
+                }
+              }
+            },
+            {
+              "name": "mint_capability",
+              "doc": "Mint capability.",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Coin"
+                  },
+                  "name": "MintCapability"
+                }
+              }
+            },
+            {
+              "name": "burn_capability",
+              "doc": "Burn capability.",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Coin"
+                  },
+                  "name": "BurnCapability"
+                }
+              }
+            },
+            {
+              "name": "admin_fees",
+              "doc": "Holds both admin fees and the minimum pool liquidity.",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Coin"
+                  },
+                  "name": "Coin"
+                }
+              }
+            },
+            {
+              "name": "swap_events",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Event"
+                  },
+                  "name": "EventHandle"
+                }
+              }
+            }
+          ],
+          "type_params": ["Coin0", "Coin1"],
+          "abilities": ["key"]
+        },
+        {
+          "module_name": {
+            "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+            "name": "Pair"
+          },
+          "name": "SwapEvent",
+          "doc": "Emitted when a swap occurs.",
+          "fields": [
+            {
+              "name": "sender_addr",
+              "ty": "address"
+            },
+            {
+              "name": "amount0_in",
+              "ty": "u64"
+            },
+            {
+              "name": "amount1_in",
+              "ty": "u64"
+            },
+            {
+              "name": "amount0_out",
+              "ty": "u64"
+            },
+            {
+              "name": "amount1_out",
+              "ty": "u64"
+            }
+          ],
+          "abilities": ["drop", "store"]
+        },
+        {
+          "module_name": {
+            "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+            "name": "Pair"
+          },
+          "name": "SwapReceipt",
+          "doc": "A \"hot potato\" struct recording the number of `Coin<T>`'s that\n were borrowed. Because this struct does not have the `key` or\n `store` ability, it cannot be transferred or otherwise placed in\n persistent storage. Because it does not have the `drop` ability,\n it cannot be discarded. Thus, the only way to get rid of this\n struct is to call `repay` sometime during the transaction that created it,\n which is exactly what we want from a flash swap.",
+          "fields": [
+            {
+              "name": "sender_addr",
+              "ty": "address"
+            },
+            {
+              "name": "reserve0",
+              "ty": "u64"
+            },
+            {
+              "name": "reserve1",
+              "ty": "u64"
+            },
+            {
+              "name": "amount0_out",
+              "ty": "u64"
+            },
+            {
+              "name": "amount1_out",
+              "ty": "u64"
+            }
+          ],
+          "type_params": ["Coin0", "Coin1"],
+          "abilities": []
+        }
+      ],
+      "errors": {
+        "EINSUFFICIENT_INPUT_AMOUNT": {
+          "code": 6,
+          "name": "EINSUFFICIENT_INPUT_AMOUNT",
+          "description": "Insufficient input amount."
+        },
+        "EINSUFFICIENT_LIQUIDITY": {
+          "code": 5,
+          "name": "EINSUFFICIENT_LIQUIDITY",
+          "description": "Insufficient liquidity."
+        },
+        "EINSUFFICIENT_LIQUIDITY_MINTED": {
+          "code": 8,
+          "name": "EINSUFFICIENT_LIQUIDITY_MINTED",
+          "description": "Insufficient liquidity minted."
+        },
+        "EINSUFFICIENT_OUTPUT_AMOUNT": {
+          "code": 4,
+          "name": "EINSUFFICIENT_OUTPUT_AMOUNT",
+          "description": "Insufficient output amount."
+        },
+        "EINVARIANT_K": {
+          "code": 7,
+          "name": "EINVARIANT_K",
+          "description": "Swap invariant failed."
+        },
+        "EPAIR_ALREADY_PUBLISHED": {
+          "code": 1,
+          "name": "EPAIR_ALREADY_PUBLISHED",
+          "description": "Pair already exists."
+        },
+        "EPAIR_NOT_FOUND": {
+          "code": 3,
+          "name": "EPAIR_NOT_FOUND",
+          "description": "Pair could not be found."
+        }
+      }
+    }
+  },
+  "aliases": {
+    "AptosFramework": "0000000000000000000000000000000000000000000000000000000000000001",
+    "CoreResources": "000000000000000000000000000000000000000000000000000000000a550c18",
+    "Faucet": "8798fe1ed94b8f45fad18d05f880c70beda2f2e6ca42a5751e74a7a1660a73f6",
+    "HansonCore": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+    "HansonPeriphery": "9efd8b54dfc3c9e3adc607891dc3a113ad77462d44876a16d45319e1f45ac49b",
+    "HansonTestTokens": "9f73a7816895c9d56a54ebfb670f09484ac717ef057887a3ce14b649d8089580",
+    "LPStore": "b8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1",
+    "MintWrapper": "8209d19e48e4e999c3413fb20c6b5506a1eaee3daece5553efb9b5d6f32a940d",
+    "Std": "0000000000000000000000000000000000000000000000000000000000000001",
+    "TestTokens": "8272ce1ad59a94a73842b11583e963dbc535fec53db3942a3ea71df32d72077b",
+    "VMReserved": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "dependencies": {
+    "ASCII": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "ASCII"
+      },
+      "functions": [],
+      "structs": [
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "ASCII"
+          },
+          "name": "Char",
+          "fields": [
+            {
+              "name": "byte",
+              "ty": "u8"
+            }
+          ],
+          "abilities": ["copy", "drop", "store"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "ASCII"
+          },
+          "name": "String",
+          "fields": [
+            {
+              "name": "bytes",
+              "ty": {
+                "vector": "u8"
+              }
+            }
+          ],
+          "abilities": ["copy", "drop", "store"]
+        }
+      ],
+      "errors": {
+        "EINVALID_ASCII_CHARACTER": {
+          "code": 0,
+          "name": "EINVALID_ASCII_CHARACTER"
+        }
+      }
+    },
+    "BCS": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "BCS"
+      },
+      "functions": [],
+      "structs": [],
+      "errors": {}
+    },
+    "Coin": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "functions": [
+        {
+          "name": "register",
+          "ty_args": ["coin_type"],
+          "args": []
+        },
+        {
+          "name": "transfer",
+          "ty_args": ["coin_type"],
+          "args": [
+            {
+              "name": "to",
+              "ty": "address"
+            },
+            {
+              "name": "amount",
+              "ty": "u64"
+            }
+          ]
+        }
+      ],
+      "structs": [
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "Coin",
+          "fields": [
+            {
+              "name": "value",
+              "ty": "u64"
+            }
+          ],
+          "type_params": ["CoinType"],
+          "abilities": ["store"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "BurnCapability",
+          "fields": [
+            {
+              "name": "dummy_field",
+              "ty": "bool"
+            }
+          ],
+          "type_params": ["CoinType"],
+          "abilities": ["copy", "store", "key"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "CoinEvents",
+          "fields": [
+            {
+              "name": "register_events",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Event"
+                  },
+                  "name": "EventHandle"
+                }
+              }
+            }
+          ],
+          "abilities": ["key"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "CoinInfo",
+          "fields": [
+            {
+              "name": "name",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "ASCII"
+                  },
+                  "name": "String"
+                }
+              }
+            },
+            {
+              "name": "symbol",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "ASCII"
+                  },
+                  "name": "String"
+                }
+              }
+            },
+            {
+              "name": "decimals",
+              "ty": "u64"
+            },
+            {
+              "name": "supply",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Option"
+                  },
+                  "name": "Option"
+                }
+              }
+            }
+          ],
+          "type_params": ["CoinType"],
+          "abilities": ["key"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "CoinStore",
+          "fields": [
+            {
+              "name": "coin",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Coin"
+                  },
+                  "name": "Coin"
+                }
+              }
+            },
+            {
+              "name": "deposit_events",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Event"
+                  },
+                  "name": "EventHandle"
+                }
+              }
+            },
+            {
+              "name": "withdraw_events",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Event"
+                  },
+                  "name": "EventHandle"
+                }
+              }
+            }
+          ],
+          "type_params": ["CoinType"],
+          "abilities": ["key"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "DepositEvent",
+          "fields": [
+            {
+              "name": "amount",
+              "ty": "u64"
+            }
+          ],
+          "abilities": ["drop", "store"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "MintCapability",
+          "fields": [
+            {
+              "name": "dummy_field",
+              "ty": "bool"
+            }
+          ],
+          "type_params": ["CoinType"],
+          "abilities": ["copy", "store", "key"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "RegisterEvent",
+          "fields": [
+            {
+              "name": "type_info",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "TypeInfo"
+                  },
+                  "name": "TypeInfo"
+                }
+              }
+            }
+          ],
+          "abilities": ["drop", "store"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Coin"
+          },
+          "name": "WithdrawEvent",
+          "fields": [
+            {
+              "name": "amount",
+              "ty": "u64"
+            }
+          ],
+          "abilities": ["drop", "store"]
+        }
+      ],
+      "errors": {
+        "ECOIN_INFO_ADDRESS_MISMATCH": {
+          "code": 0,
+          "name": "ECOIN_INFO_ADDRESS_MISMATCH"
+        },
+        "ECOIN_INFO_ALREADY_PUBLISHED": {
+          "code": 1,
+          "name": "ECOIN_INFO_ALREADY_PUBLISHED"
+        },
+        "ECOIN_INFO_NOT_PUBLISHED": {
+          "code": 2,
+          "name": "ECOIN_INFO_NOT_PUBLISHED"
+        },
+        "ECOIN_STORE_ALREADY_PUBLISHED": {
+          "code": 3,
+          "name": "ECOIN_STORE_ALREADY_PUBLISHED"
+        },
+        "ECOIN_STORE_NOT_PUBLISHED": {
+          "code": 4,
+          "name": "ECOIN_STORE_NOT_PUBLISHED"
+        },
+        "EDESTRUCTION_OF_NONZERO_TOKEN": {
+          "code": 6,
+          "name": "EDESTRUCTION_OF_NONZERO_TOKEN"
+        },
+        "EINSUFFICIENT_BALANCE": {
+          "code": 5,
+          "name": "EINSUFFICIENT_BALANCE"
+        }
+      }
+    },
+    "Errors": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Errors"
+      },
+      "functions": [],
+      "structs": [],
+      "errors": {}
+    },
+    "Event": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Event"
+      },
+      "functions": [],
+      "structs": [
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Event"
+          },
+          "name": "EventHandle",
+          "fields": [
+            {
+              "name": "counter",
+              "ty": "u64"
+            },
+            {
+              "name": "guid",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "Event"
+                  },
+                  "name": "GUIDWrapper"
+                }
+              }
+            }
+          ],
+          "type_params": ["T"],
+          "abilities": ["store"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Event"
+          },
+          "name": "EventHandleGenerator",
+          "fields": [
+            {
+              "name": "counter",
+              "ty": "u64"
+            },
+            {
+              "name": "addr",
+              "ty": "address"
+            }
+          ],
+          "abilities": ["key"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Event"
+          },
+          "name": "GUIDWrapper",
+          "fields": [
+            {
+              "name": "len_bytes",
+              "ty": "u8"
+            },
+            {
+              "name": "guid",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "GUID"
+                  },
+                  "name": "GUID"
+                }
+              }
+            }
+          ],
+          "abilities": ["drop", "store"]
+        }
+      ],
+      "errors": {}
+    },
+    "GUID": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "GUID"
+      },
+      "functions": [],
+      "structs": [
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "GUID"
+          },
+          "name": "GUID",
+          "fields": [
+            {
+              "name": "id",
+              "ty": {
+                "struct": {
+                  "module_name": {
+                    "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                    "name": "GUID"
+                  },
+                  "name": "ID"
+                }
+              }
+            }
+          ],
+          "abilities": ["drop", "store"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "GUID"
+          },
+          "name": "CreateCapability",
+          "fields": [
+            {
+              "name": "addr",
+              "ty": "address"
+            }
+          ],
+          "abilities": ["drop", "store", "key"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "GUID"
+          },
+          "name": "Generator",
+          "fields": [
+            {
+              "name": "counter",
+              "ty": "u64"
+            }
+          ],
+          "abilities": ["key"]
+        },
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "GUID"
+          },
+          "name": "ID",
+          "fields": [
+            {
+              "name": "creation_num",
+              "ty": "u64"
+            },
+            {
+              "name": "addr",
+              "ty": "address"
+            }
+          ],
+          "abilities": ["copy", "drop", "store"]
+        }
+      ],
+      "errors": {
+        "EGUID_GENERATOR_NOT_PUBLISHED": {
+          "code": 0,
+          "name": "EGUID_GENERATOR_NOT_PUBLISHED"
+        }
+      }
+    },
+    "LP": {
+      "module_name": {
+        "address": "b8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1",
+        "name": "LP"
+      },
+      "functions": [],
+      "structs": [
+        {
+          "module_name": {
+            "address": "b8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1",
+            "name": "LP"
+          },
+          "name": "LP",
+          "fields": [
+            {
+              "name": "dummy_field",
+              "ty": "bool"
+            }
+          ],
+          "type_params": ["Coin0", "Coin1"],
+          "abilities": ["store"]
+        }
+      ],
+      "errors": {
+        "ENOT_LP_STORE": {
+          "code": 1,
+          "name": "ENOT_LP_STORE"
+        }
+      }
+    },
+    "Option": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Option"
+      },
+      "functions": [],
+      "structs": [
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "Option"
+          },
+          "name": "Option",
+          "fields": [
+            {
+              "name": "vec",
+              "ty": {
+                "vector": {
+                  "type_parameter": 0
+                }
+              }
+            }
+          ],
+          "type_params": ["Element"],
+          "abilities": ["copy", "drop", "store"]
+        }
+      ],
+      "errors": {
+        "EOPTION_IS_SET": {
+          "code": 0,
+          "name": "EOPTION_IS_SET"
+        },
+        "EOPTION_NOT_SET": {
+          "code": 1,
+          "name": "EOPTION_NOT_SET"
+        }
+      }
+    },
+    "Signer": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Signer"
+      },
+      "functions": [],
+      "structs": [],
+      "errors": {}
+    },
+    "TypeInfo": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "TypeInfo"
+      },
+      "functions": [],
+      "structs": [
+        {
+          "module_name": {
+            "address": "0000000000000000000000000000000000000000000000000000000000000001",
+            "name": "TypeInfo"
+          },
+          "name": "TypeInfo",
+          "fields": [
+            {
+              "name": "account_address",
+              "ty": "address"
+            },
+            {
+              "name": "module_name",
+              "ty": {
+                "vector": "u8"
+              }
+            },
+            {
+              "name": "struct_name",
+              "ty": {
+                "vector": "u8"
+              }
+            }
+          ],
+          "abilities": ["copy", "drop", "store"]
+        }
+      ],
+      "errors": {}
+    },
+    "Vector": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Vector"
+      },
+      "functions": [],
+      "structs": [],
+      "errors": {
+        "EINDEX_OUT_OF_BOUNDS": {
+          "code": 0,
+          "name": "EINDEX_OUT_OF_BOUNDS"
+        }
+      }
+    }
+  },
+  "errors": {
+    "error_categories": {
+      "1": {
+        "code_name": "INVALID_STATE",
+        "code_description": ""
+      },
+      "2": {
+        "code_name": "REQUIRES_ADDRESS",
+        "code_description": ""
+      },
+      "3": {
+        "code_name": "REQUIRES_ROLE",
+        "code_description": ""
+      },
+      "4": {
+        "code_name": "REQUIRES_CAPABILITY",
+        "code_description": ""
+      },
+      "5": {
+        "code_name": "NOT_PUBLISHED",
+        "code_description": ""
+      },
+      "6": {
+        "code_name": "ALREADY_PUBLISHED",
+        "code_description": ""
+      },
+      "7": {
+        "code_name": "INVALID_ARGUMENT",
+        "code_description": ""
+      },
+      "8": {
+        "code_name": "LIMIT_EXCEEDED",
+        "code_description": ""
+      },
+      "10": {
+        "code_name": "INTERNAL",
+        "code_description": ""
+      },
+      "255": {
+        "code_name": "CUSTOM",
+        "code_description": ""
+      }
+    },
+    "module_error_maps": {
+      "0x1::ASCII": {
+        "0": {
+          "code_name": "EINVALID_ASCII_CHARACTER",
+          "code_description": ""
+        }
+      },
+      "0x1::Coin": {
+        "0": {
+          "code_name": "ECOIN_INFO_ADDRESS_MISMATCH",
+          "code_description": ""
+        },
+        "1": {
+          "code_name": "ECOIN_INFO_ALREADY_PUBLISHED",
+          "code_description": ""
+        },
+        "2": {
+          "code_name": "ECOIN_INFO_NOT_PUBLISHED",
+          "code_description": ""
+        },
+        "3": {
+          "code_name": "ECOIN_STORE_ALREADY_PUBLISHED",
+          "code_description": ""
+        },
+        "4": {
+          "code_name": "ECOIN_STORE_NOT_PUBLISHED",
+          "code_description": ""
+        },
+        "5": {
+          "code_name": "EINSUFFICIENT_BALANCE",
+          "code_description": ""
+        },
+        "6": {
+          "code_name": "EDESTRUCTION_OF_NONZERO_TOKEN",
+          "code_description": ""
+        }
+      },
+      "0x1::GUID": {
+        "0": {
+          "code_name": "EGUID_GENERATOR_NOT_PUBLISHED",
+          "code_description": ""
+        }
+      },
+      "0x1::Option": {
+        "0": {
+          "code_name": "EOPTION_IS_SET",
+          "code_description": ""
+        },
+        "1": {
+          "code_name": "EOPTION_NOT_SET",
+          "code_description": ""
+        }
+      },
+      "0x1::Vector": {
+        "0": {
+          "code_name": "EINDEX_OUT_OF_BOUNDS",
+          "code_description": ""
+        }
+      },
+      "0xb8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1::LP": {
+        "1": {
+          "code_name": "ENOT_LP_STORE",
+          "code_description": ""
+        }
+      },
+      "0xfcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162::Pair": {
+        "1": {
+          "code_name": "EPAIR_ALREADY_PUBLISHED",
+          "code_description": "Pair already exists."
+        },
+        "3": {
+          "code_name": "EPAIR_NOT_FOUND",
+          "code_description": "Pair could not be found."
+        },
+        "4": {
+          "code_name": "EINSUFFICIENT_OUTPUT_AMOUNT",
+          "code_description": "Insufficient output amount."
+        },
+        "5": {
+          "code_name": "EINSUFFICIENT_LIQUIDITY",
+          "code_description": "Insufficient liquidity."
+        },
+        "6": {
+          "code_name": "EINSUFFICIENT_INPUT_AMOUNT",
+          "code_description": "Insufficient input amount."
+        },
+        "7": {
+          "code_name": "EINVARIANT_K",
+          "code_description": "Swap invariant failed."
+        },
+        "8": {
+          "code_name": "EINSUFFICIENT_LIQUIDITY_MINTED",
+          "code_description": "Insufficient liquidity minted."
+        }
+      }
+    }
+  },
+  "structs": [
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Option"
+      },
+      "name": "Option",
+      "fields": [
+        {
+          "name": "vec",
+          "ty": {
+            "vector": {
+              "type_parameter": 0
+            }
+          }
+        }
+      ],
+      "type_params": ["Element"],
+      "abilities": ["copy", "drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "ASCII"
+      },
+      "name": "Char",
+      "fields": [
+        {
+          "name": "byte",
+          "ty": "u8"
+        }
+      ],
+      "abilities": ["copy", "drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "ASCII"
+      },
+      "name": "String",
+      "fields": [
+        {
+          "name": "bytes",
+          "ty": {
+            "vector": "u8"
+          }
+        }
+      ],
+      "abilities": ["copy", "drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "TypeInfo"
+      },
+      "name": "TypeInfo",
+      "fields": [
+        {
+          "name": "account_address",
+          "ty": "address"
+        },
+        {
+          "name": "module_name",
+          "ty": {
+            "vector": "u8"
+          }
+        },
+        {
+          "name": "struct_name",
+          "ty": {
+            "vector": "u8"
+          }
+        }
+      ],
+      "abilities": ["copy", "drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "GUID"
+      },
+      "name": "GUID",
+      "fields": [
+        {
+          "name": "id",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "GUID"
+              },
+              "name": "ID"
+            }
+          }
+        }
+      ],
+      "abilities": ["drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "GUID"
+      },
+      "name": "CreateCapability",
+      "fields": [
+        {
+          "name": "addr",
+          "ty": "address"
+        }
+      ],
+      "abilities": ["drop", "store", "key"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "GUID"
+      },
+      "name": "Generator",
+      "fields": [
+        {
+          "name": "counter",
+          "ty": "u64"
+        }
+      ],
+      "abilities": ["key"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "GUID"
+      },
+      "name": "ID",
+      "fields": [
+        {
+          "name": "creation_num",
+          "ty": "u64"
+        },
+        {
+          "name": "addr",
+          "ty": "address"
+        }
+      ],
+      "abilities": ["copy", "drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Event"
+      },
+      "name": "EventHandle",
+      "fields": [
+        {
+          "name": "counter",
+          "ty": "u64"
+        },
+        {
+          "name": "guid",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Event"
+              },
+              "name": "GUIDWrapper"
+            }
+          }
+        }
+      ],
+      "type_params": ["T"],
+      "abilities": ["store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Event"
+      },
+      "name": "EventHandleGenerator",
+      "fields": [
+        {
+          "name": "counter",
+          "ty": "u64"
+        },
+        {
+          "name": "addr",
+          "ty": "address"
+        }
+      ],
+      "abilities": ["key"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Event"
+      },
+      "name": "GUIDWrapper",
+      "fields": [
+        {
+          "name": "len_bytes",
+          "ty": "u8"
+        },
+        {
+          "name": "guid",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "GUID"
+              },
+              "name": "GUID"
+            }
+          }
+        }
+      ],
+      "abilities": ["drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "Coin",
+      "fields": [
+        {
+          "name": "value",
+          "ty": "u64"
+        }
+      ],
+      "type_params": ["CoinType"],
+      "abilities": ["store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "BurnCapability",
+      "fields": [
+        {
+          "name": "dummy_field",
+          "ty": "bool"
+        }
+      ],
+      "type_params": ["CoinType"],
+      "abilities": ["copy", "store", "key"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "CoinEvents",
+      "fields": [
+        {
+          "name": "register_events",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Event"
+              },
+              "name": "EventHandle"
+            }
+          }
+        }
+      ],
+      "abilities": ["key"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "CoinInfo",
+      "fields": [
+        {
+          "name": "name",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "ASCII"
+              },
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "symbol",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "ASCII"
+              },
+              "name": "String"
+            }
+          }
+        },
+        {
+          "name": "decimals",
+          "ty": "u64"
+        },
+        {
+          "name": "supply",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Option"
+              },
+              "name": "Option"
+            }
+          }
+        }
+      ],
+      "type_params": ["CoinType"],
+      "abilities": ["key"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "CoinStore",
+      "fields": [
+        {
+          "name": "coin",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Coin"
+              },
+              "name": "Coin"
+            }
+          }
+        },
+        {
+          "name": "deposit_events",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Event"
+              },
+              "name": "EventHandle"
+            }
+          }
+        },
+        {
+          "name": "withdraw_events",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Event"
+              },
+              "name": "EventHandle"
+            }
+          }
+        }
+      ],
+      "type_params": ["CoinType"],
+      "abilities": ["key"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "DepositEvent",
+      "fields": [
+        {
+          "name": "amount",
+          "ty": "u64"
+        }
+      ],
+      "abilities": ["drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "MintCapability",
+      "fields": [
+        {
+          "name": "dummy_field",
+          "ty": "bool"
+        }
+      ],
+      "type_params": ["CoinType"],
+      "abilities": ["copy", "store", "key"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "RegisterEvent",
+      "fields": [
+        {
+          "name": "type_info",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "TypeInfo"
+              },
+              "name": "TypeInfo"
+            }
+          }
+        }
+      ],
+      "abilities": ["drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Coin"
+      },
+      "name": "WithdrawEvent",
+      "fields": [
+        {
+          "name": "amount",
+          "ty": "u64"
+        }
+      ],
+      "abilities": ["drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "b8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1",
+        "name": "LP"
+      },
+      "name": "LP",
+      "fields": [
+        {
+          "name": "dummy_field",
+          "ty": "bool"
+        }
+      ],
+      "type_params": ["Coin0", "Coin1"],
+      "abilities": ["store"]
+    },
+    {
+      "module_name": {
+        "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+        "name": "Pair"
+      },
+      "name": "Pair",
+      "doc": "Stores a pair.",
+      "fields": [
+        {
+          "name": "reserve0",
+          "doc": "The `Coin0` coins backing the LP token.",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Coin"
+              },
+              "name": "Coin"
+            }
+          }
+        },
+        {
+          "name": "reserve1",
+          "doc": "The `Coin1` coins backing the LP token.",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Coin"
+              },
+              "name": "Coin"
+            }
+          }
+        },
+        {
+          "name": "mint_capability",
+          "doc": "Mint capability.",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Coin"
+              },
+              "name": "MintCapability"
+            }
+          }
+        },
+        {
+          "name": "burn_capability",
+          "doc": "Burn capability.",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Coin"
+              },
+              "name": "BurnCapability"
+            }
+          }
+        },
+        {
+          "name": "admin_fees",
+          "doc": "Holds both admin fees and the minimum pool liquidity.",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Coin"
+              },
+              "name": "Coin"
+            }
+          }
+        },
+        {
+          "name": "swap_events",
+          "ty": {
+            "struct": {
+              "module_name": {
+                "address": "0000000000000000000000000000000000000000000000000000000000000001",
+                "name": "Event"
+              },
+              "name": "EventHandle"
+            }
+          }
+        }
+      ],
+      "type_params": ["Coin0", "Coin1"],
+      "abilities": ["key"]
+    },
+    {
+      "module_name": {
+        "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+        "name": "Pair"
+      },
+      "name": "SwapEvent",
+      "doc": "Emitted when a swap occurs.",
+      "fields": [
+        {
+          "name": "sender_addr",
+          "ty": "address"
+        },
+        {
+          "name": "amount0_in",
+          "ty": "u64"
+        },
+        {
+          "name": "amount1_in",
+          "ty": "u64"
+        },
+        {
+          "name": "amount0_out",
+          "ty": "u64"
+        },
+        {
+          "name": "amount1_out",
+          "ty": "u64"
+        }
+      ],
+      "abilities": ["drop", "store"]
+    },
+    {
+      "module_name": {
+        "address": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+        "name": "Pair"
+      },
+      "name": "SwapReceipt",
+      "doc": "A \"hot potato\" struct recording the number of `Coin<T>`'s that\n were borrowed. Because this struct does not have the `key` or\n `store` ability, it cannot be transferred or otherwise placed in\n persistent storage. Because it does not have the `drop` ability,\n it cannot be discarded. Thus, the only way to get rid of this\n struct is to call `repay` sometime during the transaction that created it,\n which is exactly what we want from a flash swap.",
+      "fields": [
+        {
+          "name": "sender_addr",
+          "ty": "address"
+        },
+        {
+          "name": "reserve0",
+          "ty": "u64"
+        },
+        {
+          "name": "reserve1",
+          "ty": "u64"
+        },
+        {
+          "name": "amount0_out",
+          "ty": "u64"
+        },
+        {
+          "name": "amount1_out",
+          "ty": "u64"
+        }
+      ],
+      "type_params": ["Coin0", "Coin1"],
+      "abilities": []
+    }
+  ]
+}

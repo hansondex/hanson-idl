@@ -1,0 +1,137 @@
+{
+  "name": "LPStore",
+  "modules": {
+    "LP": {
+      "module_name": {
+        "address": "b8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1",
+        "name": "LP"
+      },
+      "functions": [],
+      "structs": [
+        {
+          "module_name": {
+            "address": "b8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1",
+            "name": "LP"
+          },
+          "name": "LP",
+          "doc": "Represents an LP coin.",
+          "fields": [
+            {
+              "name": "dummy_field",
+              "ty": "bool"
+            }
+          ],
+          "type_params": ["Coin0", "Coin1"],
+          "abilities": ["store"]
+        }
+      ],
+      "errors": {
+        "ENOT_LP_STORE": {
+          "code": 1,
+          "name": "ENOT_LP_STORE",
+          "description": "Pairs must be created by using the LP store signer."
+        }
+      }
+    }
+  },
+  "aliases": {
+    "Faucet": "8798fe1ed94b8f45fad18d05f880c70beda2f2e6ca42a5751e74a7a1660a73f6",
+    "HansonCore": "fcf44ae2a6938ebed4d2cb7882ae9e1c4110d02afcf80a3995bd887cee734162",
+    "HansonPeriphery": "9efd8b54dfc3c9e3adc607891dc3a113ad77462d44876a16d45319e1f45ac49b",
+    "HansonTestTokens": "9f73a7816895c9d56a54ebfb670f09484ac717ef057887a3ce14b649d8089580",
+    "LPStore": "b8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1",
+    "MintWrapper": "8209d19e48e4e999c3413fb20c6b5506a1eaee3daece5553efb9b5d6f32a940d",
+    "Std": "0000000000000000000000000000000000000000000000000000000000000001",
+    "TestTokens": "8272ce1ad59a94a73842b11583e963dbc535fec53db3942a3ea71df32d72077b"
+  },
+  "dependencies": {
+    "Errors": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Errors"
+      },
+      "functions": [],
+      "structs": [],
+      "errors": {}
+    },
+    "Signer": {
+      "module_name": {
+        "address": "0000000000000000000000000000000000000000000000000000000000000001",
+        "name": "Signer"
+      },
+      "functions": [],
+      "structs": [],
+      "errors": {}
+    }
+  },
+  "errors": {
+    "error_categories": {
+      "1": {
+        "code_name": "INVALID_STATE",
+        "code_description": ""
+      },
+      "2": {
+        "code_name": "REQUIRES_ADDRESS",
+        "code_description": ""
+      },
+      "3": {
+        "code_name": "REQUIRES_ROLE",
+        "code_description": ""
+      },
+      "4": {
+        "code_name": "REQUIRES_CAPABILITY",
+        "code_description": ""
+      },
+      "5": {
+        "code_name": "NOT_PUBLISHED",
+        "code_description": ""
+      },
+      "6": {
+        "code_name": "ALREADY_PUBLISHED",
+        "code_description": ""
+      },
+      "7": {
+        "code_name": "INVALID_ARGUMENT",
+        "code_description": ""
+      },
+      "8": {
+        "code_name": "LIMIT_EXCEEDED",
+        "code_description": ""
+      },
+      "10": {
+        "code_name": "INTERNAL",
+        "code_description": ""
+      },
+      "255": {
+        "code_name": "CUSTOM",
+        "code_description": ""
+      }
+    },
+    "module_error_maps": {
+      "0xb8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1::LP": {
+        "1": {
+          "code_name": "ENOT_LP_STORE",
+          "code_description": "Pairs must be created by using the LP store signer."
+        }
+      }
+    }
+  },
+  "structs": [
+    {
+      "module_name": {
+        "address": "b8e1527a15b01acbdc2aaf7509b3723715af6bb84c8b5ffa0259d0e0d8407ab1",
+        "name": "LP"
+      },
+      "name": "LP",
+      "doc": "Represents an LP coin.",
+      "fields": [
+        {
+          "name": "dummy_field",
+          "ty": "bool"
+        }
+      ],
+      "type_params": ["Coin0", "Coin1"],
+      "abilities": ["store"]
+    }
+  ]
+}

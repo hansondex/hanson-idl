@@ -1,0 +1,71 @@
+{
+  "name": "@hansondex/hanson-idl",
+  "version": "0.0.1",
+  "description": "Interface definition for the Hanson DEX.",
+  "repository": "git@github.com:HansonDEX/hanson-idl.git",
+  "author": "Hanson So <me@hanson.so>",
+  "license": "AGPL-3.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "keywords": [
+    "hanson",
+    "blockchain",
+    "aptos",
+    "move"
+  ],
+  "homepage": "https://hanson.so",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/hansondex/hanson-idl/issues",
+    "email": "me@hanson.so"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
+    "clean": "rm -fr dist/",
+    "lint": "eslint . --cache",
+    "lint:ci": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "docs:generate": "typedoc --excludePrivate --includeVersion --out site/ src/index.ts",
+    "prepare": "husky install"
+  },
+  "packageManager": "yarn@3.2.1",
+  "lint-staged": {
+    "*.{ts,tsx,cjs}": "eslint --cache --fix",
+    "*.{json,js,jsx,html,css,md,yml,yaml}": "prettier --write"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.3",
+    "@saberhq/eslint-config": "^1.13.30",
+    "@saberhq/tsconfig": "^1.13.30",
+    "@types/eslint": "^8",
+    "@types/lodash.keyby": "^4",
+    "@types/node": "^18.0.0",
+    "@types/prettier": "^2",
+    "@yarnpkg/doctor": "^3",
+    "eslint": "^8.18.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "typedoc": "^0.22.18",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@movingco/core": "^0.1.33",
+    "@movingco/prelude": "^0.1.33",
+    "lodash.keyby": "^4.6.0",
+    "tslib": "^2.4.0"
+  }
+}
