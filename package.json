@@ -67,7 +67,7 @@
   },
   "dependencies": {
     "@movingco/core": "^0.1.33",
-    "@movingco/prelude": "^0.1.33",
+    "@movingco/prelude": "^0.3.0",
     "lodash.keyby": "^4.6.0",
     "tslib": "^2.4.0"
   },
